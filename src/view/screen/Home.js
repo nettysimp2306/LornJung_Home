@@ -13,6 +13,7 @@ import Weather from "../../../components/Weather";
 import { API_KEY } from "../../../utils/WeatherAPIKey";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "./color";
+//import { Notifications } from 'react-native-notifications';
 
 class Home extends Component {
   state = {
@@ -90,33 +91,90 @@ class Home extends Component {
     const { isLoading, temperature, error , heatindex} = this.state;
 
     let titleText;
-    let subtitleText;
+    let subtitleText; 
+    var n = 0;
   
   //ทำเกี่ยวกับ Notification แจ้งเตือน Heat Index
     switch (true) {
       case heatindex >= 125:
-        titleText = 'Extreame Danger';
-        subtitleText = 'Heat stroke highly likely';
+        titleText = 'ระดับความร้อนอันตรายมาก';
+        subtitleText = 'o ระดับความร้อนนี้อันตรายมาก อย่าออกนอกบ้านเด็ดขาด \no หาที่ร่มรื่นและเย็นสบาย เพื่อป้องกันจากความร้อนฉุกเฉินที่อาจก่อให้เกิดอันตรายต่อร่างกาย \noดื่มน้ำเย็นอย่างต่อเนื่องเพื่อรักษาความชื้นในร่างกาย ระวังอาการเหนื่อยหอบหรือมีอาการผิดปกติอื่นๆ \noหากมีอาการผิดปกติหรือรู้สึกไม่สบาย ติดต่อสถานพยาบาลหรือเจ้าหน้าที่ทางการแพทย์ทันที';
+        if(n == 0){
+          const scheduleNotification = () => {
+            Notifications.postLocalNotification({
+              title: 'เตือนภัย',
+              body: 'สภาวะอากาศร้อนอันตรายมากเหล่านี้เป็นอันตรายสำหรับชีวิต คุณควรหลีกเลี่ยงการอยู่ภายนอกในเวลาเหล่านี้',
+              extra: {
+                key1: 'value1',
+                key2: 'value2',
+              },
+            });
+          };
+          n++;
+        }
+
         break;
         
       case heatindex >= 103 && heatindex < 124:
-        titleText = 'Danger';
-        subtitleText = 'Heat cramps or heat exhaustion likely, and heat stroke possible with prolonged exposure and/or physical activity';
+        n = 4;
+        titleText = 'ระดับความร้อนอันตราย';
+        subtitleText = 'o หลีกเลี่ยงการอยู่นอกอาคารหรือที่แสงแดดตรงโดยเฉพาะในช่วงเวลาที่อากาศร้อนมากที่สุด\no ให้ใช้เสื้อผ้าที่ระบายความร้อนและหมวกหรือผ้าคลุมหัวเพื่อป้องกันจากแสงแดด\no ดื่มน้ำเพียงพอและบ่อยครั้งเพื่อรักษาความชื้นในร่างกาย หากมีอาการไม่สบายหรืออาการอ่อนเพลียรุนแรง\no ให้หาที่ร่มรื่นและพักผ่อนให้เพียงพอ';
+        if(n == 0){
+          const scheduleNotification = () => {
+            Notifications.postLocalNotification({
+              title: 'เตือนภัย',
+              body: 'อย่าออกนอกบ้านหากไม่จำเป็น ให้หาที่ร่มรื่นหรือใช้ร่มบังเพื่อป้องกันจากแสงแดดที่ร้อนจัดดื่มน้ำเย็นและดื่มน้ำมากๆ \nและใส่หมวกหรือผ้าคลุมหัวเพื่อปกป้องจากแสงแดดและรังแดดโดยตลอด',
+              extra: {
+                key1: 'value1',
+                key2: 'value2',
+              },
+            });
+          };
+          n++;
+        }
         break;
 
       case heatindex >= 90 && heatindex < 103:
-        titleText = 'Extreme Caution';
-        subtitleText = 'Heat stroke, heat cramps, or heat exhaustion possible with prolonged exposure and/or physical activity';
+        n = 3;
+        titleText = 'ระดับความร้อนสูง';
+        subtitleText = 'อย่าลืมดื่มน้ำเพียงพอและเพิ่มปริมาณการดื่มในสภาวะอากาศร้อนระดับสูง\no สวมใส่เสื้อผ้าบางเบาและระบายอากาศได้ดีเพื่อช่วยลดความร้อนและรักษาความรู้สึกสดชื่น\no หลีกเลี่ยงกิจกรรมที่ต้องการพลังงานมากหรือเครื่องใช้ที่อาจเพิ่มความร้อนให้แก่ร่างกายในช่วงเวลาที่อากาศร้อนสูงสุด.';
+        if(n == 0){
+          const scheduleNotification = () => {
+            Notifications.postLocalNotification({
+              title: 'เตือนภัย',
+              body: 'ระวังความร้อนสูง! ดื่มน้ำเพียงพอและรักษาร่างกายเย็นสบายตลอดเวลา',
+              extra: {
+                key1: 'value1',
+                key2: 'value2',
+              },
+            });
+          };
+          n++;
+        }
         break;
 
       case heatindex >= 80 && heatindex < 90:
-        titleText = 'Caution';
-        subtitleText = 'Fatigue possible with prolonged exposure and/or physical activity';
+        n = 2;
+        titleText = 'ระดับความร้อนปาน';
+        subtitleText = 'อย่าลืมดื่มน้ำเพียงพอและบ่อยครั้งเพื่อรักษาความชุ่มชื้นในร่างกาย\no สวมใส่เสื้อผ้าบางเบาและระบายอากาศได้ดีเพื่อช่วยลดความร้อนและรักษาความรู้สึกสดชื่น\n oหลีกเลี่ยงการอยู่ภายนอกในช่วงเวลาที่ร้อนที่สุดและหากจำเป็นต้องอยู่ภายนอก\no ให้สวมหมวกหรือใช้ร่มกันแดดเพื่อป้องกันจากแสงแดดโดยตรง.';
+        if(n == 0){
+          const scheduleNotification = () => {
+            Notifications.postLocalNotification({
+              title: 'เตือนภัย',
+              body: 'เตรียมน้ำให้เพียงพอและสวมใส่เสื้อผ้าบางเบาเพื่อรักษาความสดชื่นในสภาพอากาศร้อนระดับปานกลาง',
+              extra: {
+                key1: 'value1',
+                key2: 'value2',
+              },
+            });
+          };
+          n++;
+        }
         break;
 
       case heatindex >= 0 && heatindex < 79:
-        titleText = 'Low Heat';
-        subtitleText = 'Low Heat Stay Safe';
+        titleText = 'ไม่มีอันตราย';
+        subtitleText = 'Low Heat Stay Safe :)';
         break;
     }
 
